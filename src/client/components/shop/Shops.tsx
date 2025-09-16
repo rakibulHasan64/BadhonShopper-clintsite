@@ -458,7 +458,7 @@ function Shops() {
                               <div className="relative">
                                  <img
                                     className="w-full h-44 md:h-59 lg:h-72 object-cover group-hover:opacity-90 transition-opacity"
-                                    src={item.imageUrl || "https://i.ibb.co/20C4hwD0/bf88110a43d1887ec561eb082d8e541c-jpg-720x720q80.jpg"}
+                                    src={item.thumbnail || "https://i.ibb.co/20C4hwD0/bf88110a43d1887ec561eb082d8e541c-jpg-720x720q80.jpg"}
                                     alt={item.product_name}
                                  />
                                  <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full">

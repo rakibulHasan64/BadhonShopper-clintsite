@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGetProductsQuery } from "@/redux/product/Product.api";
-import { FiAward } from "react-icons/fi";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Link } from "react-router";
+import { tagConfig } from "./TagData";
 
 function TopSales() {
 
    const { data: products } = useGetProductsQuery(undefined)
-   const topSalesProducts = products?.data?.filter((item) =>
+   const topSalesProducts = products?.data?.filter((item: any) =>
       item.tags?.includes("TOP_SALES")
    );
+
+   
 
    return (
       <>
@@ -27,14 +30,14 @@ function TopSales() {
 
             {/* Products Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 ">
-               {topSalesProducts?.map((item) => (
+               {topSalesProducts?.map((item: any) => (
                   <Link to={`/detlis/${item._id}`}>
                      <div key={item.id} className=" rounded-t-[5px] overflow-hidden transition-shadow duration-300 group">
                         {/* Product Image with Badges */}
                         <div className="relative">
                            <img
                               className="w-full h-44 md:h-72 object-cover group-hover:opacity-90 transition-opacity"
-                              src={item.imageUrl || "https://i.ibb.co/V0Lxg87n/Add-a-subheading-1.png"}
+                              src={item.thumbnail || "https://i.ibb.co/V0Lxg87n/Add-a-subheading-1.png"}
                               alt={item.name || "Product Image"}
                            />
 
@@ -51,18 +54,29 @@ function TopSales() {
                               <MdFavoriteBorder className="text-2xl  text-pink-600" />
                            </button>
 
+                           <div className="absolute bottom-1 left-3 flex gap-2 flex-wrap">
+                              {item.tags?.map((tag: any) => {
+                                 const badge =tagConfig[tag];
+                                 if (!badge) return null;
+                                 return (
+                                    <button
+                                       key={tag}
+                                       aria-label={`${badge.label} Badge`}
+                                       className={`px-2 py-1 md:px-3 md:py-2 text-white rounded-md shadow-md flex items-center gap-2 transition-all duration-200 ${badge.color}`}
+                                    >
+                                       {badge.icon}
+                                       <div className="leading-tight text-left">
+                                          {badge.label.split(" ").map((word, i) => (
+                                             <p key={i} className="text-[10px] md:text-xs font-semibold">
+                                                {word}
+                                             </p>
+                                          ))}
+                                       </div>
+                                    </button>
 
-
-                           <button
-                              aria-label="Top Sale Badge"
-                              className="absolute bottom-1 left-3 px-2 py-1 md:px-3 md:py-2 bg-pink-600 text-white rounded-md shadow-md flex items-center gap-2 hover:bg-pink-700 transition-all duration-200"
-                           >
-                              <FiAward className="text-[12px] md:text-xl" />
-                              <div className="leading-tight">
-                                 <p className="text-[10px] md:text-xs font-semibold">Top</p>
-                                 <p className="text-[10px] md:text-xs font-semibold">Sale</p>
-                              </div>
-                           </button>
+                                 );
+                              })}
+                           </div>
 
                         </div>
 
@@ -116,52 +130,3 @@ export default TopSales;
 
 
 
-
-
-
-// const products = [
-//    {
-//       id: 1,
-//       name: 'Lava Humidifier',
-//       price: 2780,
-//       originalPrice: 3080,
-//       discount: 300,
-//       rating: 0,
-//       reviews: 0,
-//       sold: 3,
-//       imageUrl: 'https://i.ibb.co/V0Lxg87n/Add-a-subheading-1.png'
-//    },
-//    {
-//       id: 2,
-//       name: 'PLEXTONE EX2 ULTRA Magnetic Radiator',
-//       price: 1690,
-//       originalPrice: 1790,
-//       discount: 100,
-//       rating: 0,
-//       reviews: 0,
-//       sold: 10,
-//       imageUrl: 'https://i.ibb.co/BHDNbKBP/images.jpg'
-//    },
-//    {
-//       id: 3,
-//       name: 'T800 Ultra Smartwatch',
-//       price: 1150,
-//       originalPrice: 1350,
-//       discount: 200,
-//       rating: 0,
-//       reviews: 0,
-//       sold: 7,
-//       imageUrl: 'https://i.ibb.co/XxCqtCTs/download-4.jpg'
-//    },
-//    {
-//       id: 4,
-//       name: 'HOCO GM26 Phone Cooling Fan',
-//       price: 1120,
-//       originalPrice: 1280,
-//       discount: 160,
-//       rating: 0,
-//       reviews: 0,
-//       sold: 16,
-//       imageUrl: 'https://i.ibb.co/0j1KV5zn/download-1.jpg'
-//    }
-// ];

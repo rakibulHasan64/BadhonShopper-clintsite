@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // import { useGetProductByIDQuery } from "@/redux/product/Product.api";
 // import { useState } from "react";
@@ -204,6 +205,7 @@ const Detlis = () => {
 
                <div className="text-sm font-semibold mt-2">Available variant:</div>
                <div className="flex gap-2">
+               
                   {product?.colors?.map((c: any) => (
                      <div
                         key={c._id}

@@ -57,7 +57,9 @@ function Banner() {
                   <h3 className="text-lg font-semibold">All Categories</h3>
                </div>
                <ul className="divide-y">
-                  {categories.map((cat: any, index: number) => (
+
+                  {/* catagory image  */}
+                  {categories?.map((cat: any, index: number) => (
                      <li
                         key={index}
                         onClick={() => handleCategoryClick(cat)}
@@ -65,7 +67,7 @@ function Banner() {
                      >
                         <div className="flex items-center gap-3">
                            <img
-                              src={cat.common_image || "https://i.ibb.co/PGCYfqjZ/download.jpg"}
+                              src={cat.slider_image || "https://i.ibb.co/PGCYfqjZ/download.jpg"}
                               alt={cat.name}
                               className="w-10 h-10 object-cover rounded"
                            />
@@ -88,16 +90,19 @@ function Banner() {
                   modules={[Pagination, Autoplay]}
                   className="lg:rounded-2xl overflow-hidden w-full"
                >
-                  {categories.map((cat: any) => (
-                     <SwiperSlide key={cat.id}>
-                        <img
-                           src={cat.banner_image || "https://i.ibb.co/PGCYfqjZ/download.jpg"}
-                           alt={cat.name}
-                           className="w-full h-full md:h-[350px] lg:h-[420px] object-cover"
-                           onClick={() => handleCategoryClick(cat)}
-                        />
-                     </SwiperSlide>
-                  ))}
+                  {categories
+                     ?.filter((cat: any) => cat.common_image) 
+                     .map((cat: any) => (
+                        <SwiperSlide key={cat._id}>
+                           <img
+                              src={cat.common_image}
+                              alt={cat.name}
+                              className="w-full h-full md:h-[350px] lg:h-[420px] object-cover"
+                              onClick={() => handleCategoryClick(cat)}
+                           />
+                        </SwiperSlide>
+                     ))}
+
                </Swiper>
 
                {/* Mobile Category Slider */}

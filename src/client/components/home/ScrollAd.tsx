@@ -42,7 +42,7 @@ export default function ScrollAd() {
          </h3>
 
          <div className="grid grid-cols-4 gap-4 px-2">
-            {categories.map((cat, index) => (
+            {categories.map((cat: any, index: any) => (
                <div key={index} className="flex flex-col items-center text-center text-sm text-gray-700 hover:text-pink-600 cursor-pointer">
                   <img src={cat.common_image || "https://i.ibb.co/sJq56tjx/download-5.jpg"} onClick={() => handleCategoryClick(cat)} alt={cat.name} className="w-12 h-12 object-contain mb-1" />
                   <span>{cat.name}</span>
