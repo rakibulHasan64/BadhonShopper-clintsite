@@ -3,12 +3,17 @@ import { FaLock } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import GoogleIcon from "@/client/components/auth/GoogleIcon";
-import useAuth from "@/client/utils/useAuth";
+
+import { useGoogleMutation, useRegisterMutation } from "@/redux/authapi/authapi";
 
 function Register() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [register, { isLoading }] = useRegisterMutation();
+  const [google, { isLoading: googleLoading }] = useGoogleMutation();
+
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",   // ✅ fullName এর জায়গায় name
     email: "",
     phone: "",
     password: "",
@@ -17,9 +22,7 @@ function Register() {
     gender: "",
   });
 
-  const { createUser, googleLogin, updateUser } = useAuth();
-
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setFormData({
       ...formData,
@@ -27,7 +30,7 @@ function Register() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -35,19 +38,28 @@ function Register() {
     }
 
     try {
-      const result = await createUser(formData.email, formData.password);
-      await updateUser({ displayName: formData.fullName });
-      console.log("Registered user:", result.user);
-    } catch (error) {
-      alert(error.message);
+      // ✅ API call
+      await register(formData).unwrap();
+      alert("User registered successfully!");
+    } catch (err: any) {
+      alert("Registration failed: " + (err?.data?.message || err.message));
     }
   };
 
+  
+
   const handleGoogleSignUp = async () => {
     try {
-      await googleLogin();
-    } catch (error) {
-      alert(error.message);
+      // Step 1: Google OAuth token collect করুন
+      // (এখানে আপনি Google SDK বা firebase auth ব্যবহার করবেন)
+      const token = "GOOGLE_ID_TOKEN";
+
+      // Step 2: backend এ পাঠান
+      const res = await google(token).unwrap();
+      alert("Google signup success!");
+      console.log("Google response:", res);
+    } catch (err: any) {
+      alert("Google signup failed: " + (err?.data?.message || err.message));
     }
   };
 
@@ -57,13 +69,13 @@ function Register() {
         <h2 className="text-3xl font-bold text-[#ff0066] mb-6">Sign up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
+          {/* Name */}
           <div>
             <label className="text-gray-700 text-xl">Full Name</label>
             <input
               type="text"
-              name="fullName"
-              value={formData.fullName}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
               required
@@ -202,9 +214,10 @@ function Register() {
           {/* Submit Button */}
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full mt-3 bg-[#ff0066] hover:bg-[#e6005c] text-white font-semibold py-2.5 rounded-md shadow-lg"
           >
-            Sign up
+            {isLoading ? "Signing up..." : "Sign up"}
           </button>
 
           {/* Google Button */}
